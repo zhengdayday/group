@@ -1,7 +1,7 @@
 package com.zdd.controller;
 
-import com.zdd.util.DistributedLockHandler;
-import com.zdd.util.Lock;
+
+import com.zdd.util.service.DistributedLocker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @Autowired
-    private DistributedLockHandler distributedLockHandler;
+    private DistributedLocker distributedLocker;
 
     @RequestMapping("index")
-    public String index() {
-        Lock lock = new Lock("ztt", "min");
-        if (distributedLockHandler.tryLock(lock)) {
-            try {
-                System.out.print("执行方法");
-                Thread.sleep(5000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            distributedLockHandler.releaseLock(lock);
+    public String index() throws Exception{
+        distributedLocker.lock("test", () -> threadRun());
+        return "hello world!";
+    }
+
+    public Object threadRun() {
+        try {
+            System.out.println("执行方法！");
+            Thread.sleep(5000);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        return "hello world";
+        return null;
     }
 }

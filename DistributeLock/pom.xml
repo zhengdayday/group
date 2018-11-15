@@ -28,6 +28,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+
         <!-- 开启web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
